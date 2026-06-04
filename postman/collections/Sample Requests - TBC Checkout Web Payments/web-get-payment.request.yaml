@@ -1,0 +1,74 @@
+$kind: http-request
+description: |-
+  **_Path_**
+  /payments/{payment_id}
+
+
+  **_Description_**
+  Request returns payment details for given payment_id
+
+
+  **_Authorization_**
+
+  Bearer {_access-token value_}
+
+  **_Request Parameters_**
+
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **apikey** * _(header)_ | _string_ | developer app key value
+  **payment_id** * _(path)_ | _string_ | payment id
+
+
+  **_Response Model_**
+
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **payId** | _string_ | payment id 
+  **status** | _string_ | payment status / Created / Processing / Succeeded / Failed
+  **links {}** | _array_ | links
+  **-- uri** | _string_ | URL
+  **-- method** | _string_ | method to use on URL
+  **-- rel** | _string_ | action to use on URL
+  **transactionId** | _string_ | transaction_id from UFC
+  **httpStatusCode** | _string_ | http status code
+  **developerMessage** | _string_ | developer message for logging in local system
+  **userMessage** | _string_ | error message for user
+
+
+
+  >_httpStatusCode_ values:
+  * 200 - finished successfully
+  * 400 - bad request, incorrect parameters
+  * 401 - request unauthorized
+  * 500 - internal server error
+url: https://{{env}}/v1/tpay/payments/:payment_id
+method: GET
+headers:
+  Content-Type: application/x-www-form-urlencoded
+  apikey: "{{app-key}}"
+pathVariables:
+  payment_id: "{{payment-id}}"
+body:
+  type: text
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: "{{access-token}}"
+scripts:
+  - type: afterResponse
+    code: "postman.setNextRequest('web-cancel-payment');\r
+
+      \r
+
+      pm.test(\"Status code is 200\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });"
+    language: text/javascript
+examples: ./.resources/web-get-payment.resources/examples
+order: 3000

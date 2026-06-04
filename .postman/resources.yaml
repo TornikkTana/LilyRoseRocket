@@ -1,0 +1,15 @@
+# Use this workspace to collaborate
+workspace:
+  id: 310b7782-f13c-4387-8e6c-e824d96f3cea
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Sample Requests - TBC Checkout Web Payments: 2c9cbe5b-7e28-41f6-8440-6bfdb2492536
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

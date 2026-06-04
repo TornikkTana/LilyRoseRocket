@@ -5,6 +5,7 @@ import { LanguageProvider } from '@/context/LanguageContext';
 import { CartProvider } from '@/context/CartContext';
 import BloomCursor from '@/components/BloomCursor';
 import CartDrawer from '@/app/components/CartDrawer';
+import CheckoutSuccessModal from '@/app/components/CheckoutSuccessModal';
 import '../styles/tailwind.css';
 
 const notoSerifGeorgian = Noto_Serif_Georgian({
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     <CartProvider>
                         {children}
                         <CartDrawer />
+                        <CheckoutSuccessModal />
                     </CartProvider>
                 </LanguageProvider>
                 <BloomCursor />

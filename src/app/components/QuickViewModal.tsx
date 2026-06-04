@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import AppImage from '@/components/ui/AppImage';
 import { useLanguage } from '@/context/LanguageContext';
-import type { Bouquet } from '@/app/components/FeaturedBouquets';
+import type { Bouquet } from '@/context/CartContext';
 import { useCart } from '@/context/CartContext';
 
 const DISTRICT_KEYS: Record<string, string> = {
@@ -76,9 +76,11 @@ export default function QuickViewModal({ bouquet, onClose }: QuickViewModalProps
     const handleOrder = (e: React.FormEvent) => {
         e.preventDefault();
 
+        const bouquetName = bouquet.nameKey ? t(bouquet.nameKey) : (bouquet.name || '');
+
         // Format the message for WhatsApp
         const message = `${t('modal.whatsapp.greeting')}\n\n` +
-            `🌸 ${t('modal.whatsapp.bouquet')}: ${t(bouquet.nameKey)}\n` +
+            `🌸 ${t('modal.whatsapp.bouquet')}: ${bouquetName}\n` +
             `💰 ${t('modal.whatsapp.price')}: ${bouquet.price}\n\n` +
             `📋 *${t('cart.whatsapp.details')}*\n` +
             `${t('cart.whatsapp.name')}: ${name}\n` +
@@ -119,7 +121,7 @@ export default function QuickViewModal({ bouquet, onClose }: QuickViewModalProps
                 <div className="relative w-full md:w-1/2 h-64 md:h-auto min-h-[300px] bg-muted">
                     <AppImage
                         src={bouquet.src}
-                        alt={bouquet.alt}
+                        alt={bouquet.alt || (bouquet.nameKey ? t(bouquet.nameKey) : bouquet.name || '')}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -132,7 +134,7 @@ export default function QuickViewModal({ bouquet, onClose }: QuickViewModalProps
                                 color: 'var(--accent)',
                                 backdropFilter: 'blur(8px)'
                             }}>
-                            {t(bouquet.tagKey)}
+                            {bouquet.tagKey ? t(bouquet.tagKey) : (bouquet.category || 'Collection')}
                         </span>
                     </div>
                 </div>
@@ -141,10 +143,10 @@ export default function QuickViewModal({ bouquet, onClose }: QuickViewModalProps
                 <div className="w-full md:w-1/2 flex flex-col overflow-y-auto p-6 md:p-8 bg-white">
                     <div className="mb-6">
                         <h2 className="text-3xl font-display font-semibold text-foreground mb-1 leading-tight">
-                            {t(bouquet.nameKey)}
+                            {bouquet.nameKey ? t(bouquet.nameKey) : bouquet.name}
                         </h2>
-                        <p className="text-muted-foreground mb-4">
-                            {t(bouquet.subNameKey)}
+                        <p className="text-muted-foreground mb-4 text-xs uppercase tracking-wider">
+                            {bouquet.subNameKey ? t(bouquet.subNameKey) : `${bouquet.category || 'Luxury'} Collection`}
                         </p>
                         <div className="text-2xl font-roboto font-bold" style={{ color: 'var(--accent)' }}>
                             {bouquet.price}
@@ -152,9 +154,10 @@ export default function QuickViewModal({ bouquet, onClose }: QuickViewModalProps
 
                         <div className="mt-4 prose prose-sm text-muted-foreground">
                             <p>
-                                {t('modal.description')}
+                                {bouquet.isCustom ? (bouquet.description || 'Artisanal handcrafted flower composition.') : t('modal.description')}
                             </p>
                         </div>
+
 
                         {/* Add to Cart Action */}
                         <button

@@ -1,0 +1,38 @@
+$kind: http-example
+request:
+  url: https://api.tbcbank.ge/v1/tpay/access-token
+  method: POST
+  headers:
+    - key: Content-Type
+      value: application/x-www-form-urlencoded
+    - key: apikey
+      value: wN5nRcjd61V8raj5OfCE1mRhG6kkbaeI
+      description: "Developer app key for making API calls through Open API platfrom. "
+  body:
+    type: urlencoded
+    content:
+      - key: client_Id
+        value: "5399999"
+        description: TBC Checkout client_id (merchant id)
+      - key: client_secret
+        value: f61a48
+        description: TBC Checkout client_secret
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Fri, 09 Aug 2019 13:57:47 GMT
+    Content-Type: application/json; charset=utf-8
+    Transfer-Encoding: chunked
+    Connection: keep-alive
+    Strict-Transport-Security: max-age=2592000
+    Set-Cookie: TS0109cf5a=01863392edcef5cd69cc283fb1b09f88d0689295837666f8c80c069f75f6d1c96bcc8cfee5df7b497cac007ea2fa588c1a0f780b9f; Path=/; Domain=.tst1openapi.tbcbank.ge
+  body:
+    type: json
+    content: |-
+      {
+          "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNDQkQzN0Q1Qjc2QTcyMTMzNTFFMTYzMDk1NDkyRjE4MTA3RkE1MEYiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJQTDAzMWJkcWNoTTFIaFl3bFVrdkdCQl9wUTgifQ.eyJuYmYiOjE1NjUzNTkwNjcsImV4cCI6MTU2NTQ0NTQ2NywiaXNzIjoiaHR0cHM6Ly9hY2NvdW50c3RwYXl0c3QudGJjYmFuay5nZS8iLCJhdWQiOlsiaHR0cHM6Ly9hY2NvdW50c3RwYXl0c3QudGJjYmFuay5nZS9yZXNvdXJjZXMiLCJwYXltZW50YXBpIl0sImNsaWVudF9pZCI6IjUzOTk5OTkiLCJzY29wZSI6WyJwYXltZW50YXBpIl19.EG29V9wxjGPUpnJlYOcAcEYw9BvSiCFwqfzAbZ4jkxJD4q-EcP94-i7XLZhzS8Vv4k1NBWHg2x7MKQQu81AlBFungVCKFwNCV0ItkYPTSguq4s5QGpgQcSjtmC_q6wVTT8WA4jR7IcwQ8qZMKKcrAZJBehDWdal1uO_Mhnn1Dnc9KFdFnXWUc7iIjIryuHPc3U-ZOQh2COIl0Acl-LTMeRh_KZByz2Gf2lLShhRbI0G-5YtWXObtLZ2ZKfCJB50TtaMM16vrfSQXh0FX6BHHxAtyPBflOzCgovi8CORgkTbaGaPtJHqjfep8r8L-45zhFVPXT19rLhWyfhEPBDm78A",
+          "expires_in": 86400,
+          "token_type": "Bearer"
+      }
+order: 1000

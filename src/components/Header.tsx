@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import AppLogo from '@/components/ui/AppLogo';
 import { useLanguage, Language } from '@/context/LanguageContext';
@@ -10,6 +11,7 @@ export default function Header() {
     const [solid, setSolid] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const headerRef = useRef<HTMLElement>(null);
+    const [langMenuOpen, setLangMenuOpen] = useState(false);
     const { language, setLanguage, t } = useLanguage();
     const { totalItems, setIsCartOpen } = useCart();
 
@@ -27,11 +29,14 @@ export default function Header() {
         return () => window.removeEventListener('scroll', close);
     }, [menuOpen]);
 
+    const pathname = usePathname();
+    const isHome = pathname === '/';
     const navLinks = [
-        { label: t('nav.collection'), href: '#collection' },
-        { label: t('nav.story'), href: '#about' },
-        { label: t('nav.gallery'), href: '#gallery' },
-        { label: t('nav.delivery'), href: '#delivery' },
+        { label: t('nav.collection'), href: isHome ? '#collection' : '/#collection' },
+        { label: t('nav.story'), href: isHome ? '#about' : '/#about' },
+        { label: t('nav.flowers'), href: '/flowers' },
+        { label: t('nav.gallery'), href: isHome ? '#gallery' : '/#gallery' },
+        { label: t('nav.delivery'), href: isHome ? '#delivery' : '/#delivery' },
     ];
 
     const handleLanguageChange = (lang: Language) => {
@@ -79,21 +84,36 @@ export default function Header() {
 
                     {/* Language Switcher + CTA + Hamburger */}
                     <div className="flex items-center gap-5">
-                        {/* Desktop Language Switcher */}
-                        <div className="hidden sm:flex items-center gap-2 text-xs font-semibold tracking-wider uppercase border border-border rounded-full p-1 bg-background/50 backdrop-blur-sm">
-                            {(['ka', 'en', 'ru'] as Language[]).map((lang) => (
-                                <button
-                                    key={lang}
-                                    onClick={() => handleLanguageChange(lang)}
-                                    className={`px-2.5 py-1 rounded-full transition-all duration-300 ${
-                                        language === lang
-                                            ? 'bg-primary text-primary-foreground font-bold'
-                                            : 'text-muted-foreground hover:text-foreground'
-                                    }`}
-                                >
-                                    {lang}
-                                </button>
-                            ))}
+                        {/* Compact Language Switcher */}
+                        <div className="relative inline-block text-left">
+                            <button
+                                onClick={() => setLangMenuOpen((v) => !v)}
+                                className="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-semibold uppercase border border-border rounded-full bg-background/50 backdrop-blur-sm hover:bg-background/70 transition-colors"
+                                style={{ color: solid ? 'var(--foreground)' : '#ffffff' }}
+                            >
+                                {language}
+                                <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0l-4.25-4.25a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                                </svg>
+                            </button>
+                            {langMenuOpen && (
+                                <div className={`origin-top-right absolute right-0 mt-2 w-24 rounded-md shadow-lg ${solid ? 'bg-background' : 'bg-foreground'} ring-1 ring-black ring-opacity-5 z-10`}>
+                                    <div className="py-1">
+                                        {(['ka', 'en', 'ru'] as Language[]).map((lang) => (
+                                            <button
+                                                key={lang}
+                                                onClick={() => {
+                                                    handleLanguageChange(lang);
+                                                    setLangMenuOpen(false);
+                                                }}
+                                                className={`block w-full text-left px-3 py-2 text-xs uppercase ${language === lang ? 'bg-primary text-primary-foreground font-bold' : (solid ? 'text-foreground hover:text-accent' : 'text-white hover:text-white/80')} transition-colors`}
+                                            >
+                                                {lang}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <a
@@ -164,24 +184,36 @@ export default function Header() {
                 style={{ backdropFilter: 'blur(16px)', backgroundColor: 'rgba(253,248,243,0.96)' }}
             >
                 <div className="flex flex-col items-center justify-center h-full gap-8 px-6">
-                    {/* Mobile Language Switcher */}
-                    <div className="flex items-center gap-3 text-sm font-semibold tracking-wider uppercase border border-border rounded-full p-1.5 bg-background mb-4">
-                        {(['ka', 'en', 'ru'] as Language[]).map((lang) => (
+                    {/* Compact Mobile Language Switcher */}
+                        <div className="relative inline-block text-left sm:hidden">
                             <button
-                                key={lang}
-                                onClick={() => {
-                                    handleLanguageChange(lang);
-                                }}
-                                className={`px-4 py-1.5 rounded-full transition-all duration-300 ${
-                                    language === lang
-                                        ? 'bg-primary text-primary-foreground font-bold'
-                                        : 'text-muted-foreground'
-                                }`}
+                                onClick={() => setLangMenuOpen((v) => !v)}
+                                className="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-semibold uppercase border border-border rounded-full bg-background/50 backdrop-blur-sm hover:bg-background/70 transition-colors" style={{ color: solid ? 'var(--foreground)' : '#ffffff' }}
                             >
-                                {lang === 'ka' ? 'ქარ' : lang === 'en' ? 'Eng' : 'Рус'}
+                                {language}
+                                <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0l-4.25-4.25a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                                </svg>
                             </button>
-                        ))}
-                    </div>
+                            {langMenuOpen && (
+                                <div className="origin-top-right absolute left-0 mt-2 w-24 rounded-md shadow-lg bg-background ring-1 ring-black ring-opacity-5 z-10">
+                                    <div className="py-1">
+                                        {(['ka', 'en', 'ru'] as Language[]).map((lang) => (
+                                            <button
+                                                key={lang}
+                                                onClick={() => {
+                                                    handleLanguageChange(lang);
+                                                    setLangMenuOpen(false);
+                                                }}
+                                                className={`block w-full text-left px-3 py-2 text-xs uppercase ${language === lang ? 'bg-primary text-primary-foreground font-bold' : (solid ? 'text-foreground hover:text-accent' : 'text-white hover:text-white/80')} transition-colors`}
+                                            >
+                                                {lang}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
                     {navLinks?.map((link, i) => (
                         <a

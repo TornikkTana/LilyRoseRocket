@@ -1,0 +1,64 @@
+$kind: http-example
+request:
+  url: https://api.tbcbank.ge/v1/tpay/payments
+  method: POST
+  headers:
+    Content-Type: application/json
+    apikey: uyc1i0ObNZCVp11QPbiBY4GrhJt07Vrz
+  body:
+    type: text
+    content: "{\r
+
+      \    \"amount\": {\r
+
+      \    \t\"currency\":\"GEL\",\r
+
+      \        \"total\": 546,\r
+
+      \        \"subTotal\": 400,\r
+
+      \        \"tax\": 0,\r
+
+      \        \"shipping\": 0\r
+
+      \    },\r
+
+      \    \"returnurl\":\"shopping.ge/callback\",\r
+
+      \    \"extra\":\"Sample Info Message\"\r
+
+      }"
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Mon, 12 Aug 2019 07:59:49 GMT
+    Content-Type: application/json; charset=utf-8
+    Transfer-Encoding: chunked
+    Connection: keep-alive
+    Strict-Transport-Security: max-age=2592000
+    Set-Cookie: TS0109cf5a=01863392ed7b7bab11dc91a2d5f051521d5303c0a1190db78a2bb48539dfede940b09b4243bdfd3ed1535b75885c62fc7bdd11b52e; Path=/; Domain=.tst1openapi.tbcbank.ge
+  body:
+    type: json
+    content: |-
+      {
+          "payId": "tpay-fkgokd18839",
+          "status": "Created",
+          "links": [
+              {
+                  "uri": "https://tpaypaymentapi.test.loc:8079/v1/Payments/tpay-fkgokd18839",
+                  "method": "GET",
+                  "rel": "self"
+              },
+              {
+                  "uri": "https://tpaycheckoutweb.test.loc:8078/checkout/tpay-fkgokd18839",
+                  "method": "REDIRECT",
+                  "rel": "approval_url"
+              }
+          ],
+          "transactionId": null,
+          "httpStatusCode": 200,
+          "developerMessage": null,
+          "userMessage": null
+      }
+order: 1000

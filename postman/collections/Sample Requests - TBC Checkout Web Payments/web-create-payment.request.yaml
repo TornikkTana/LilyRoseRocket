@@ -1,0 +1,135 @@
+$kind: http-request
+description: |-
+  **_Path_**
+  /payments
+
+
+  **_Description_**
+  Request initiates Tpay web payment. The response contains payment object details and links for a) checking payment status and b) redirecting user to finish initiated payment.
+
+
+  **_Authorization_**
+
+  Bearer {_access-token value_}
+
+  **_Request Parameters_**
+
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **apikey** * _(header)_ | _string_ | developer app key value
+  **amount {}** * _(body)_ | _array_ | payment amount {}
+  **-- currency** * | _string_ | currency of transaction
+  **-- total** * | _number_ | total amount of payment
+  **-- subtotal** | _number_ | amount of purchase
+  **-- tax** | _number_ | amount of tax
+  **-- shipping** | _number_ | amount of shipping price
+  **returnurl** * _(body)_ | _string_ | callback url to redirect user after finishing payment (e.g."order details page")
+  **extra** _(body)_ | _string_ | additional parameter for merchant-specific info
+
+
+  **_Response Model_**
+
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **payId** | _string_ | payment id 
+  **status** | _string_ | payment status / Created / Processing / Succeeded / Failed
+  **links {}** | _array_ | links
+  **-- uri** | _string_ | URL
+  **-- method** | _string_ | method to use on URL
+  **-- rel** | _string_ | action to use on URL
+  **transactionId** | _string_ | transaction_id from UFC
+  **httpStatusCode** | _string_ | http status code
+  **developerMessage** | _string_ | developer message for logging in local system
+  **userMessage** | _string_ | error message for user
+
+
+
+  >_httpStatusCode_ values:
+  * 200 - finished successfully
+  * 400 - bad request, incorrect parameters
+  * 401 - request unauthorized
+  * 500 - internal server error
+url: https://{{env}}/v1/tpay/payments
+method: POST
+headers:
+  Content-Type: application/json
+  apikey: "{{app-key}}"
+body:
+  type: text
+  content: "{\r
+
+    \    \"amount\": {\r
+
+    \        \"currency\":\"GEL\",\r
+
+    \        \"total\": 200,\r
+
+    \        \"subTotal\": 0,\r
+
+    \        \"tax\": 0,\r
+
+    \        \"shipping\": 0\r
+
+    \    },\r
+
+    \    \"returnurl\":\"shopping.ge/callback\",\r
+
+    \    \"extra\":\"GE60TB7226145063300008\",\r
+
+    \    \"userIpAddress\" : \"127.0.0.1\",\r
+
+    \    \"expirationMinutes\" : \"5\",\r
+
+    \    \"methods\" : [5, 7, 8],\r
+
+    \    \"installmentProducts\":\r
+
+    \    [\r
+
+    \       {\"Name\":\"t1\",\"Price\":100,\"Quantity\":1},\r
+
+    \       {\"Name\":\"t1\",\"Price\":50,\"Quantity\":1},\r
+
+    \       {\"Name\":\"t1\",\"Price\":50,\"Quantity\":1}\r
+
+    \    ],\r
+
+    \    \"callbackUrl\":\"https://google.com\", \r
+
+    \    \"preAuth\":true,\r
+
+    \    \"language\":\"EN\",\r
+
+    \    \"merchantPaymentId\": \"P123123\",\r
+
+    \    \"saveCard\": true,\r
+
+    \    \"saveCardToDate\": \"0321\"\r
+
+    }\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: "{{access-token}}"
+scripts:
+  - type: afterResponse
+    code: "let payment_id = pm.response.json().payId;\r
+
+      postman.setEnvironmentVariable(\"payment-id\", payment_id);\r
+
+      \r
+
+      pm.test(\"Status code is 200\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      postman.setNextRequest('web-get-payment');"
+    language: text/javascript
+examples: ./.resources/web-create-payment.resources/examples
+order: 2000

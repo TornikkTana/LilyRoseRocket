@@ -1,0 +1,69 @@
+$kind: http-request
+description: |-
+  **_Path_**
+  /payments
+
+
+  **_Description_**
+  Request initiates Tpay web payment. The response contains payment object details and links for a) checking payment status and b) redirecting user to finish initiated payment.
+
+
+  **_Authorization_**
+
+  Bearer {_access-token value_}
+
+  **_Request Parameters_**
+
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **apikey** * _(header)_ | _string_ | developer app key value
+  **amount {}** * _(body)_ | _array_ | payment amount {}
+  **-- currency** * | _string_ | currency of transaction
+  **-- total** * | _number_ | total amount of payment
+  **-- subtotal** | _number_ | amount of purchase
+  **-- tax** | _number_ | amount of tax
+  **-- shipping** | _number_ | amount of shipping price
+  **returnurl** * _(body)_ | _string_ | callback url to redirect user after finishing payment (e.g."order details page")
+  **extra** _(body)_ | _string_ | additional parameter for merchant-specific info
+
+
+  **_Response Model_**
+
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **payId** | _string_ | payment id 
+  **status** | _string_ | payment status / Created / Processing / Succeeded / Failed
+  **links {}** | _array_ | links
+  **-- uri** | _string_ | URL
+  **-- method** | _string_ | method to use on URL
+  **-- rel** | _string_ | action to use on URL
+  **transactionId** | _string_ | transaction_id from UFC
+  **httpStatusCode** | _string_ | http status code
+  **developerMessage** | _string_ | developer message for logging in local system
+  **userMessage** | _string_ | error message for user
+
+
+
+  >_httpStatusCode_ values:
+  * 200 - finished successfully
+  * 400 - bad request, incorrect parameters
+  * 401 - request unauthorized
+  * 500 - internal server error
+url: https://{{env}}/v1/tpay/payments/:payment_id/cancel
+method: POST
+headers:
+  Content-Type: application/json
+  apikey: "{{app-key}}"
+pathVariables:
+  payment_id: "{{payment-id}}"
+body:
+  type: text
+  content: "{\r\n    \"amount\":2\r\n}"
+auth:
+  type: bearer
+  credentials:
+    token: "{{access-token}}"
+examples: ./.resources/web-cancel-payment.resources/examples
+order: 4000

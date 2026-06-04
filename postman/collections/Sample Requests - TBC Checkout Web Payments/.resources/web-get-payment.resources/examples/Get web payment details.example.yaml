@@ -1,0 +1,30 @@
+$kind: http-example
+request:
+  url: https://api.tbcbank.ge/v1/tpay/payments/tpay-fkgokd18839
+  method: GET
+  headers:
+    Content-Type: application/x-www-form-urlencoded
+    apikey: uyc1i0ObNZCVp11QPbiBY4GrhJt07Vrz
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Mon, 12 Aug 2019 08:20:01 GMT
+    Content-Type: application/json; charset=utf-8
+    Transfer-Encoding: chunked
+    Connection: keep-alive
+    Strict-Transport-Security: max-age=2592000
+    Set-Cookie: TS0109cf5a=01863392edad24cf9335207ca252ffe183c1a4910db1cd2e7672ad6783e1818d6f744dac94eda1006f9767ec3df79d2fd7afccb06c; Path=/; Domain=.tst1openapi.tbcbank.ge
+  body:
+    type: json
+    content: |-
+      {
+          "payId": "tpay-fkgokd18839",
+          "status": "Created",
+          "links": null,
+          "transactionId": null,
+          "httpStatusCode": 200,
+          "developerMessage": null,
+          "userMessage": null
+      }
+order: 1000

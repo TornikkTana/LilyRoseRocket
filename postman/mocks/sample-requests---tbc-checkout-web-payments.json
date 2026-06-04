@@ -1,0 +1,15 @@
+{
+  "id": "019e9285-2ef5-779a-8009-7d83acace5d5",
+  "version": 1,
+  "name": "Sample Requests - TBC Checkout Web Payments",
+  "slug": "new-mock-52e66",
+  "isPrivate": false,
+  "protocol": "http",
+  "port": 3001,
+  "mockSrc": "./sample-requests---tbc-checkout-web-payments.js",
+  "autoRestartOnChange": true,
+  "logging": {
+    "level": "verbose",
+    "showBody": true
+  }
+}

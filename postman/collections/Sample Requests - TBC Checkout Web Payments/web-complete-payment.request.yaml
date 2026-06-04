@@ -1,0 +1,15 @@
+$kind: http-request
+url: https://{{env}}/v1/tpay/payments/:payment_id/completion
+method: POST
+headers:
+  apikey: "{{app-key}}"
+pathVariables:
+  payment_id: "{{payment-id}}"
+body:
+  type: json
+  content: "{\r\n\t\"amount\":0.1\r\n}\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: "{{access-token}}"
+order: 5000

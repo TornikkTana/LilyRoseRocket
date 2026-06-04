@@ -1,7 +1,19 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Bouquet } from '@/app/components/FeaturedBouquets';
+export interface Bouquet {
+    id: number;
+    nameKey?: string;
+    subNameKey?: string;
+    tagKey?: string;
+    name?: string;
+    price: string;
+    src: string;
+    alt: string;
+    category?: string;
+    isCustom?: boolean;
+    description?: string;
+}
 
 export interface CartItem {
     bouquet: Bouquet;

@@ -1,0 +1,65 @@
+$kind: http-request
+description: |-
+  **_Path_**
+  /access-token
+
+
+  **_Description_**
+  Request access-token that should then be used to access Tpay resourses. 
+
+
+  **_Request Parameters_**
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **apikey** * _(header)_ | _string_ | developer app key value
+  **client\_id** * _(body)_ | _string_ | tpay client_id (merchant id) 
+  **client\_secret** * _(body)_ | _string_ | client secret
+
+
+  **_Response Model_**
+
+  Name | Type | Description
+  ------------ | ------------- | ------------
+  **access_token** | _string_ | access token value
+  **token_type** | _string_ | type of the token is set to “Bearer”
+  **expires_in** | _integer($int32)_ | lifetime in seconds of the access token
+url: '{{env}}/v1/tpay/access-token'
+method: POST
+headers:
+  - key: Content-Type
+    value: application/x-www-form-urlencoded
+  - key: apikey
+    value: "{{app-key}}"
+    description: "Developer app key for making API calls through Open API platfrom. "
+body:
+  type: urlencoded
+  content:
+    - key: client_Id
+      value: "{{web-client-id}}"
+      description: TBC Checkout client_id (merchant id)
+    - key: client_secret
+      value: "{{web-client-secret}}"
+      description: TBC Checkout client_secret
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: "let access_token = pm.response.json().access_token;\r
+
+      postman.setEnvironmentVariable(\"access-token\", access_token);\r
+
+      \r
+
+      pm.test(\"Status code is 200\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      postman.setNextRequest('web-create-payment');"
+    language: text/javascript
+examples: ./.resources/web-get-token.resources/examples
+order: 1000

@@ -1,0 +1,16 @@
+name: Sample Environment - TBC Checkout
+values:
+  - key: env
+    value: api.tbcbank.ge
+  - key: app-key
+    value: ''
+  - key: web-client-id
+    value: ''
+  - key: web-client-secret
+    value: ''
+  - key: access-token
+    value: ''
+  - key: payment-id
+    value: ''
+  - key: app-redirect-uri-encoded
+    value: ''
