@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJwt } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
+import { supabase } from '@/lib/supabase';
 import path from 'path';
 
 export async function POST(request: Request) {
@@ -35,20 +35,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'File size must be less than 5MB' }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    await mkdir(uploadDir, { recursive: true });
-
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const originalExtension = path.extname(file.name) || '.jpg';
     const safeFilename = `product-${uniqueSuffix}${originalExtension}`;
-    const filePath = path.join(uploadDir, safeFilename);
 
-    await writeFile(filePath, buffer);
+    // Upload to Supabase Storage bucket 'bouquets_images'
+    const { data, error } = await supabase.storage
+      .from('bouquets_images')
+      .upload(safeFilename, file, {
+        contentType: file.type,
+        upsert: false
+      });
 
-    return NextResponse.json({ success: true, url: `/uploads/${safeFilename}` });
+    if (error) {
+      console.error('Supabase storage upload error:', error);
+      return NextResponse.json({ error: 'Failed to upload image to Supabase' }, { status: 500 });
+    }
+
+    // Get the public URL for the uploaded file
+    const { data: publicUrlData } = supabase.storage
+      .from('bouquets_images')
+      .getPublicUrl(safeFilename);
+
+    return NextResponse.json({ success: true, url: publicUrlData.publicUrl });
   } catch (error) {
     console.error('File upload error:', error);
     return NextResponse.json({ error: 'An error occurred during file upload' }, { status: 500 });

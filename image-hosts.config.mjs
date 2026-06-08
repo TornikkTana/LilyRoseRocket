@@ -23,5 +23,9 @@ export const imageHosts = [
         protocol: 'https',
         hostname: '**.fbcdn.net',
     },
+    {
+        protocol: 'https',
+        hostname: 'gumfvwzgwksvfxwwjdai.supabase.co',
+    },
 ];
 
